@@ -1,0 +1,24 @@
+{% extends 'monApp/base.html' %}
+
+{% block title %}
+Fichiers disponibles
+{% endblock %}
+
+{% block content %}
+
+<article>
+    {% for article in langue.getArticles %}
+        <a href="accueil/article/{{ article.id }}">
+            <div class="article">
+                <img src="doc.png" class="art_type">
+                <div class=art_txt>
+                    <h1>{{ article.title }}</h1>
+                    <h2>{{ article.subTitle }}</h2>
+                </div>
+                <h3>{{ article.date|date:"Y-m-d" }}</h3>
+            </div>
+        </a>
+    {% endfor %}
+</article>
+
+{% endblock %}

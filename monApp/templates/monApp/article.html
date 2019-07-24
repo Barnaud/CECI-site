@@ -1,0 +1,17 @@
+{% extends 'monApp/base.html' %}
+{% load static %}
+
+
+{% block title %}
+{{ article.title }}
+{% endblock %}
+
+{% block content %}
+
+<article>
+{% for image_path in article.get_images_path %}
+        <img src="{% static  image_path  %}" class="img_content"/>
+{% endfor %}
+</article>
+
+{% endblock %}

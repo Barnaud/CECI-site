@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+	<img src="/{{ user.groupe.all.0.logo.img.url }}" class="main_logo"/>
+    <p></p>
+	</header>
+
+    <nav>
+        {% for langue in user.getLangues %}
+            <a href="/accueil/langue/{{langue.id}}"><div class="menu">{{ langue.nom_apparent }}</div></a>
+        {% endfor %}
+    </nav>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
+
+
+

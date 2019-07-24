@@ -1,0 +1,58 @@
+html{
+    height: 100%;
+    width: 100%;
+}
+
+@media all and (orientation: portrait){
+	background: #FFFFFF;
+}
+section{
+    width: 400px;
+    border-radius: 15px;
+    border-style: solid;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #FEFEF4;
+    margin-top: 20%;
+    box-shadow: -10px -10px 20px black;
+}
+.co{
+    text-align: center;
+    font-size: larger;
+    font-weight: 600;
+    margin-top:0px;
+}
+p{
+	text-align: center;
+
+}
+.logo_id {
+    width: 150px;
+    left: 125px;
+    position: relative;
+}
+.bg{
+    height: auto;
+    width: 80%;
+    position: fixed;
+    z-index: -1;
+    left: 10%;
+    top: 10%;
+    opacity: 0.4;
+    filter: blur(3px);
+}
+label{
+	font-family: 'Trebuchet MS';
+	font-weight: bold;
+}
+.sub{
+	    height: 12%;
+    width: auto;
+    padding-top: 3%;
+}
+
+.erreur{
+    color:red;
+    font-weight: bold;
+}

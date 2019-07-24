@@ -1,0 +1,117 @@
+body{
+	margin:0px;
+	background-color: #EAEAEA;
+}
+
+header
+{
+	width:100%;
+	height: 150px;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#002d8c+0,0064c8+100 */
+	background: #002d8c; /* Old browsers */
+	background: -moz-linear-gradient(45deg, #002d8c 0%, #0064c8 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(45deg, #002d8c 0%,#0064c8 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(45deg, #002d8c 0%,#0064c8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#002d8c', endColorstr='#0064c8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	display: block;
+	position: static;
+	left: 0;
+	top: 0;
+
+
+}
+
+.main_logo{
+	margin: 30px;
+	height:90px;
+}
+
+nav{
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0042d6+0,0064c8+99 */
+	background: #0042d6; /* Old browsers */
+	background: -moz-linear-gradient(-45deg, #0042d6 0%, #0064c8 99%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, #0042d6 0%,#0064c8 99%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, #0042d6 0%,#0064c8 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0042d6', endColorstr='#0064c8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+nav .menu{
+	display: inline-block;
+	margin: 0px;
+	margin-left: Opx;
+	font-weight: bold;
+	font-family: sans-serif;
+	color: white;
+	padding: 15px;
+	left: 30px;
+	position: relative;
+	transition: background-color;
+	transition-duration: 0.25s;
+}
+
+nav .menu:hover
+{
+	background-color: #002D66;
+	transition: background-color;
+	transition-duration: 0.25s;
+
+}
+
+article{
+	background-color: #FEFEFE;
+	width: 750px;
+	position: relative;
+	display: block;
+	margin: auto;
+	margin-top: 20px;
+}
+article .article{
+	border-bottom: solid 1pt lightgray;
+	transition: background-color;
+	transition-duration: 0.25s;
+	color: black;
+}
+article .article:hover{
+	background-color: #efefef;
+	transition: background-color;
+	transition-duration: 0.25s;
+}
+
+article .article h1{
+font-family: 'Fjalla One', sans-serif;
+font-weight: bold;
+display: inline-block;
+font-size: 15px;
+position: relative;
+vertical-align: top;
+margin: 0px;
+}
+article .article h2{
+	color: gray;
+	font-size:10px;
+	font-weight: lighter;
+}
+article .article h3{
+	color: gray;
+    position: relative;
+    float: right;
+    margin: 30px;
+    font-weight: lighter;
+    font-size: 15px;
+
+}
+
+article .art_txt{
+	display: inline-block;
+	vertical-align: top;
+	margin: 20px;
+}
+article .img_content{
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.art_type {
+    height: 80px;
+    width: auto;
+}
