@@ -6,9 +6,15 @@ from django.conf import settings
 
 urlpatterns = [
     path('', views.home),
+    path('deco', views.deco),
     path('accueil', views.forum, name='forum'),
     path('accueil/langue/<int:langue_id>', views.redirect_langue),
     path('accueil/article/<int:article_id>', views.redirect_article),
-    path('accueil/article', views.article, name="article")
+    path('accueil/article', views.article, name="article"),
+    path('admin', views.admin, name="admin"),
+    path('admin/<str:model>/<str:action>', views.admin, name="admin"),
+    path('admin/<str:model>/<str:action>/<int:arg>', views.admin, name="admin")
+
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

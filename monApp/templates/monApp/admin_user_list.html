@@ -1,0 +1,16 @@
+{% extends "monApp/admin_base.html" %}
+{% load static %}
+{% block content %}
+    <article>
+    {% for user in objectList %}
+        <a href="accueil/article/">
+            <div class="mini article">
+                    <h1>{{ user.identifiant }}</h1>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</article>
+
+    <a href=""><img src={% static "img/add.png" %} class = "admin_add"></a>
+{% endblock %}

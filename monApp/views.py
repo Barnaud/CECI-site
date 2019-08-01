@@ -3,19 +3,21 @@ from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.shortcuts import render
 from monApp import forms, models, util
+from django.forms import modelform_factory
 from os import listdir
 
 
 def home(request):
-    # On s'assure de vider la session
-    request.session.flush()
+
     auth_form = forms.LoginForm(request.POST or None)
     if auth_form.is_valid():
         req = models.ForumUser.objects.filter(
             identifiant=auth_form.cleaned_data["id"],
             password=util.hash(auth_form.cleaned_data["mdp"])).count()
-        if req:
+        if req == 1:
             request.session["user"] = models.ForumUser.objects.get(identifiant=auth_form.cleaned_data["id"]).id
+            if models.ForumUser.objects.get(identifiant=auth_form.cleaned_data["id"]).admin:
+                return  redirect("admin")
             return redirect("forum")
         else:
             return render(request, 'monApp/home.html', {"erreur": "Mauvais identifiant ou mot de passe, veuillez réessayer"})
@@ -66,3 +68,33 @@ def article(request):
     user = models.ForumUser.objects.get(id=request.session["user"])
     article = models.Article.objects.get(id=request.session["article_redirect"])
     return render(request, 'monApp/article.html', {"user": user, "article": article})
+
+
+def deco(request):
+    # On s'assure de vider la session
+    for key in request.session.keys():
+        request.session[key] = None
+    return redirect(home)
+
+
+def admin(request, model = "group", action="list", arg=None):
+    if not request.session.get("user"):
+        return HttpResponseForbidden()
+    if not models.ForumUser.objects.get(id=request.session.get("user")).admin:
+        return HttpResponseForbidden()
+
+    modelDict = {
+        "group": models.ForumGroup,
+        "user": models.ForumUser,
+        "section": models.LangueSection,
+        "article": models.Article,
+    }
+    if not model in modelDict:
+        return Http404()
+    if action == "list":
+        return render(request, modelDict[model].list_template, {"objectList": modelDict[model].objectList(arg)})
+    elif action == "add":
+        formClass = modelform_factory(modelDict[model], fields=("nom", "couleur"))
+        form = formClass(request.POST or None)
+        print(form)
+        return render (request, modelDict[model].form_template, {"form": form})

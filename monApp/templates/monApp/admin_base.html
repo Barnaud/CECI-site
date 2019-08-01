@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
+
+    <title>Administartion</title>
+</head>
+<body>
+    <header>
+
+	<img src="{% static "img/settings.png" %}" class="main_logo"/>
+
+	</header>
+
+    <nav>
+
+        <a href="{% url "admin" "group" "list" %}"><div class="menu">Gestion des utilisateurs</div></a>
+        <a href="{% url "admin" "section" "list" %}"><div class="menu">Gestion des articles</div></a>
+        <a href="/accueil/langue/{{langue.id}}"><div class="menu">Envois de mails</div></a>
+
+    </nav>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
+
+
+

@@ -10,8 +10,9 @@
 </head>
 <body>
     <header>
+        {% if user.groupe.all.0.logo %}
 	<img src="/{{ user.groupe.all.0.logo.img.url }}" class="main_logo"/>
-    <p></p>
+        {% endif %}
 	</header>
 
     <nav>

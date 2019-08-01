@@ -76,6 +76,7 @@ article .article:hover{
 	transition-duration: 0.25s;
 }
 
+
 article .article h1{
 font-family: 'Fjalla One', sans-serif;
 font-weight: bold;
@@ -111,7 +112,23 @@ article .img_content{
 	height: auto;
 }
 
+article .mini h1{
+	margin:10px;
+}
+
 .art_type {
     height: 80px;
     width: auto;
+	margin-top:6px;
+}
+
+.admin_add{
+	height: 30px;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	background-color: darkcyan;
+	border: solid white;
+	border-radius: 30px;
+	padding:8px;
 }

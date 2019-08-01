@@ -1,14 +1,9 @@
-{% extends 'monApp/base.html' %}
-
-{% block title %}
-Fichiers disponibles
-{% endblock %}
-
+{% extends "monApp/admin_base.html" %}
 {% block content %}
 
 <article>
-    {% for article in langue.getArticles %}
-        <a href="accueil/article/{{ article.id }}">
+    {% for article in objectList %}
+        <a href="accueil/article/">
             <div class="article">
                 <img src="{{ article.type_id.img.url }}" class="art_type"><div class=art_txt>
                     <h1>{{ article.title }}</h1>

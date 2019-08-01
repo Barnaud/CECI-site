@@ -1,0 +1,17 @@
+{% extends "monApp/admin_base.html" %}
+{% load static %}
+{% block content %}
+    <article>
+    {% for group in objectList %}
+        <a href="accueil/article/">
+            <div class="article">
+                <img src="{% static 'img/group.png' %}" class="art_type"><div class=art_txt>
+                    <h1>{{ group.nom }}</h1>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</article>
+
+    <a href=""><img src={% static "img/add.png" %} class = "admin_add"></a>
+{% endblock %}
