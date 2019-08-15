@@ -83,6 +83,16 @@ class ForumUser(models.Model):
         else:
             return ForumUser.objects.all()
 
+    def send_init_mail(self):
+        if self.mail:
+            template = get_template("monApp/mail_templates/addUser.txt")
+            mail_content = template.render({"username": self.identifiant,
+                                            "password": self.password})
+            msg = EmailMultiAlternatives("Bienvenue", mail_content, "test@mail.com", [self.mail])
+            msg.send()
+        else:
+            raise Exception("User has no E-mail")
+
 class logo(models.Model):
     nom = models.CharField(max_length=50)
     img = models.ImageField(upload_to="static/img/logo")

@@ -15,6 +15,7 @@ urlpatterns = [
     path('admin/<str:model>/<str:action>', views.admin, name="admin"),
     path('admin/<str:model>/<str:action>/<int:arg>', views.admin, name="admin"),
     path('admin/test', views.test),
+    path('admin/excel_import', views.user_import, name="user_import")
 
 ]
 

@@ -100,3 +100,6 @@ class MailFormTest(forms.Form):
         else:
             ret=super().__init__(data=data, files=files)
         return ret
+
+class ExcelImportForm(forms.Form):
+    file = forms.FileField()

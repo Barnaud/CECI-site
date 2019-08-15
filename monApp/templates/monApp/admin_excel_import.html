@@ -1,0 +1,16 @@
+{% extends "monApp/admin_base.html" %}
+{% load static %}
+{% block content %}
+    <article>
+        <h1>Importer des utilisateurs depuis un fichier excel</h1>
+
+    <p><a href="/static/downloads/User_import_template.xlsx">Telecharger le template du fichier à remplir</a></p>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+    <br>
+        <input type="submit">
+    </form>
+    </article>
+
+{% endblock %}

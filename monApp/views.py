@@ -124,6 +124,28 @@ def admin(request, model = "group", action="list", arg=None):
                 success = True
         return render(request, modelDict[model].form_template, {"form": form, "success": success})
 
+def user_import(request):
+    form = forms.ExcelImportForm(request.POST or None, request.FILES or None)
+    if request.FILES and form.is_valid():
+        excel_dict = util.excel_read(form.files["file"].open())
+        try:
+            util.check_excel_dict(excel_dict)
+        except Exception as e:
+            form.add_error("file",e)
+        else:
+            for user in excel_dict:
+                password = util.gen_passwd(10)
+                group = models.ForumGroup.objects.get(nom=user["groupe"])
+                new_user = models.ForumUser.objects.create(
+                    identifiant=user["identifiant"],
+                    password=password,
+                    mail=user["mail"],
+                )
+                new_user.groupe.add(group)
+                new_user.save()
+                new_user.send_init_mail()
+    return render(request, "monApp/admin_excel_import.html", {"form": form})
+
 def test(request):
     mail = models.PlannedMail.objects.get(id=1)
     mail.send()

@@ -162,8 +162,12 @@ form ul {
 }
 form ul[class="errorlist"]{
 	border:none;
+	color: red;
+	display: inline;
+	overflow:auto;
 }
 
 .success{
 	color:green;
 }
+
