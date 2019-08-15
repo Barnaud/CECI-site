@@ -33,6 +33,9 @@ nav{
 	background: -webkit-linear-gradient(-45deg, #0042d6 0%,#0064c8 99%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(135deg, #0042d6 0%,#0064c8 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0042d6', endColorstr='#0064c8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	white-space: nowrap;
+	max-height: 50px;
+	overflow: auto;
 }
 nav .menu{
 	display: inline-block;
@@ -131,4 +134,36 @@ article .mini h1{
 	border: solid white;
 	border-radius: 30px;
 	padding:8px;
+}
+
+form p input[type = "text"]{
+	border: none;
+	border-bottom: gray solid 1px;
+	width: 100%;
+	margin-right:30px;
+	margin-left:5px;
+}
+form p {
+	display: flex;
+}
+
+form img{
+	width:30%;
+	max-height: 50%;
+}
+
+form ul {
+	border: solid black 1px;
+	display: inline-block;
+	margin: 0px;
+	margin-left: 10px;
+	max-height: 100px;
+	overflow: scroll;
+}
+form ul[class="errorlist"]{
+	border:none;
+}
+
+.success{
+	color:green;
 }

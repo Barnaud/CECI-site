@@ -88,13 +88,43 @@ def admin(request, model = "group", action="list", arg=None):
         "user": models.ForumUser,
         "section": models.LangueSection,
         "article": models.Article,
+        "mail": models.PlannedMail,
     }
+    formDict = {
+        "group": forms.GroupForm,
+        "user": forms.UserForm,
+        "section": forms.SectionForm,
+        "article": forms.ArticleForm,
+        "mail": forms.MailFormTest,
+    }
+
+    success = None
+
     if not model in modelDict:
         return Http404()
     if action == "list":
         return render(request, modelDict[model].list_template, {"objectList": modelDict[model].objectList(arg)})
     elif action == "add":
-        formClass = modelform_factory(modelDict[model], fields=("nom", "couleur"))
-        form = formClass(request.POST or None)
-        print(form)
-        return render (request, modelDict[model].form_template, {"form": form})
+        form = formDict[model](request.POST or None, request.FILES or None)
+        if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                success = True
+        return render (request, modelDict[model].form_template, {"form": form,"success":success})
+    elif action == "edit" and arg:
+        try:
+            obj = modelDict[model].objects.get(id=arg)
+        except modelDict[model].DoesNotExist:
+            raise Http404()
+
+        form = formDict[model](request.POST or None, request.FILES or None, instance=obj)
+        if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                success = True
+        return render(request, modelDict[model].form_template, {"form": form, "success": success})
+
+def test(request):
+    mail = models.PlannedMail.objects.get(id=1)
+    mail.send()
+    return HttpResponse("oui.")

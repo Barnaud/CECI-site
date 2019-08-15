@@ -1,4 +1,22 @@
 {% extends "monApp/admin_base.html" %}
 {% block content %}
-{{form.as_p}}
+    <article>
+    {% if success %}
+        <p class="success">Utilisateur enregistré avec succès!</p>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data"/>
+    {% csrf_token %}
+    {{form.as_p}}
+        {% if form.instance %}
+            {% if form.instance.logo %}
+                <img src="{{ form.instance.logo.img.url }}">
+                <br>
+            {% endif %}
+        {% endif %}
+    <input type = "submit">
+    </form>
+    {% if form.instance.id %}
+    <a href = {% url "admin" model="user" action="list" arg=form.instance.id %}>Liste des utilisateurs du groupe</a>
+    {% endif %}
+    </article>
 {% endblock %}

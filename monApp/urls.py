@@ -13,7 +13,8 @@ urlpatterns = [
     path('accueil/article', views.article, name="article"),
     path('admin', views.admin, name="admin"),
     path('admin/<str:model>/<str:action>', views.admin, name="admin"),
-    path('admin/<str:model>/<str:action>/<int:arg>', views.admin, name="admin")
+    path('admin/<str:model>/<str:action>/<int:arg>', views.admin, name="admin"),
+    path('admin/test', views.test),
 
 ]
 

@@ -1,0 +1,7 @@
+Bonjour à tous,
+
+Comme vous le savez certainement, vous avez un test de prévu en {{langue}} le {{date}}.
+
+Afin de vous préparer au mieux, je vous invite à consulter les documents récemment mis en ligne.
+
+Cordialement,

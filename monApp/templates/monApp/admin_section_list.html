@@ -3,7 +3,7 @@
 {% block content %}
     <article>
     {% for section in objectList %}
-        <a href="accueil/article/">
+        <a href="{% url "admin" model="section" action="edit" arg=section.id %}">
             <div class="article">
                 <img src="{% static 'img/section.png' %}" class="art_type"><div class=art_txt>
                     <h1>{{ section.nom_complet }}</h1>
@@ -13,5 +13,5 @@
     {% endfor %}
 </article>
 
-    <a href=""><img src={% static "img/add.png" %} class = "admin_add"></a>
+    <a href="{% url "admin" model="section" action="add" %}"><img src={% static "img/add.png" %} class = "admin_add"></a>
 {% endblock %}

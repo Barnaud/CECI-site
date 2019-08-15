@@ -1,0 +1,15 @@
+{% extends "monApp/admin_base.html" %}
+{% block content %}
+    <article>
+    {% if success %}
+        <p class="success">Utilisateur enregistré avec succès!</p>
+    {% endif %}
+    <form method="POST"/>
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <input type = "submit">
+    </form>
+
+    </article>
+{% endblock %}

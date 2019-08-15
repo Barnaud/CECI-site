@@ -1,11 +1,12 @@
 {% extends "monApp/admin_base.html" %}
+{% load static %}
 {% block content %}
 
 <article>
     {% for article in objectList %}
-        <a href="accueil/article/">
+        <a href="{% url "admin" model="article" action="edit" arg=article.id %}">
             <div class="article">
-                <img src="{{ article.type_id.img.url }}" class="art_type"><div class=art_txt>
+                <img src="/static/img/article_icon/doc_F7HUvOg.png" class="art_type"><div class=art_txt>
                     <h1>{{ article.title }}</h1>
                     <h2>{{ article.subTitle }}</h2>
                 </div>
@@ -14,5 +15,7 @@
         </a>
     {% endfor %}
 </article>
+    <a href="{% url "admin" model="article" action="add" %}"><img src={% static "img/add.png" %} class = "admin_add"></a>
+
 
 {% endblock %}
