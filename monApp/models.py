@@ -117,7 +117,13 @@ class Article(models.Model):
 
     def get_images_path(self):
         path = "monApp/static/content/%s/"%(self.id)
-        return ["content/%s/%s"%(self.id, name) for name in listdir(path)]
+        try:
+            fileList = listdir(path)
+            fileList.sort()
+            print (fileList)
+            return ["content/%s/%s"%(self.id, name) for name in fileList]
+        except Exception:
+            return []
 
     @staticmethod
     def objectList(arg=None):

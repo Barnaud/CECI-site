@@ -12,6 +12,7 @@
     <header>
         {% if user.groupe.all.0.logo %}
 	<img src="{{ user.groupe.all.0.logo.img.url }}" class="main_logo"/>
+            <a href="/deco"><img src="{% static 'img/deco.png' %}" class="deco"/></a>
         {% endif %}
 	</header>
 

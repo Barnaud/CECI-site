@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
-
-    <title>Administartion</title>
+    <title>Administration</title>
 </head>
 <body>
     <header>
 
 	<img src="{% static "img/settings.png" %}" class="main_logo"/>
+        <a href="/deco"><img src="{% static 'img/deco.png' %}" class="deco"/></a>
+
 
 	</header>
 
@@ -27,6 +28,7 @@
 {% endblock %}
 
 </body>
+    <script src={% static "js/del.js" %}></script>
 </html>
 
 

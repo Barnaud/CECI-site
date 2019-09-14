@@ -1,4 +1,5 @@
 {% extends "monApp/admin_base.html" %}
+{% load static %}
 {% block content %}
     <article>
     {% if success %}
@@ -12,4 +13,7 @@
     </form>
 
     </article>
+    {% if form.instance.id %}
+        <a href="{% url "admin" model="user" action="delete" arg=form.instance.id %}"><img src="{% static "img/del.png" %}" class = "admin_del"></a>
+    {% endif %}
 {% endblock %}

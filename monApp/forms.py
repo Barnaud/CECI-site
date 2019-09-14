@@ -4,6 +4,11 @@ from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 import json
 from datetime import datetime, timedelta
+from pdf2image import convert_from_bytes
+from os import path, mkdir
+from Django import settings
+import shutil
+
 
 class LoginForm(forms.Form):
     id = forms.CharField(max_length=50)
@@ -63,7 +68,32 @@ class ArticleForm(forms.ModelForm):
         widgets={
             "langue":forms.CheckboxSelectMultiple()
         }
-    fichier = forms.FileField()
+    subTitle = forms.CharField(required=False)
+    fichier = forms.FileField(required=False)
+
+    def save(self, commit=True):
+        m = super().save(commit=True)
+        if self.files:
+            try:
+                image_set = convert_from_bytes(self.files["fichier"].file.read())
+            except Exception as e:
+                self.add_error("fichier", e)
+                return 0
+            print(path.join(settings.MEDIA_ROOT, "static/content/%s" % (m.id)))
+            try:
+                shutil.rmtree(path.join(settings.MEDIA_ROOT, "static/content/%s" % (m.id) ))
+            except Exception:
+                pass
+            finally:
+                mkdir(path.join(settings.MEDIA_ROOT, "static/content/%s" % (m.id)))
+
+            img_id=0
+            for img in image_set:
+                img_id += 1
+                img.save(path.join(settings.MEDIA_ROOT, "static/content/%s/image_%s.jpg" % (m.id, img_id)))
+
+        print("pause")
+
 
 class MailFormTest(forms.Form):
 

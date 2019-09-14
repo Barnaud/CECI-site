@@ -64,7 +64,7 @@ def article(request):
     if not request.session.get("user"):
         return HttpResponseForbidden()
     if not request.session.get("article_redirect"):
-        redirect("forum")
+        return redirect("forum")
     user = models.ForumUser.objects.get(id=request.session["user"])
     article = models.Article.objects.get(id=request.session["article_redirect"])
     return render(request, 'monApp/article.html', {"user": user, "article": article})
@@ -123,6 +123,15 @@ def admin(request, model = "group", action="list", arg=None):
                 form.save()
                 success = True
         return render(request, modelDict[model].form_template, {"form": form, "success": success})
+    elif action == "delete" and arg:
+        try :
+            obj = modelDict[model].objects.get(id=arg)
+        except modelDict[model].DoesNotExist:
+            raise Http404()
+        obj.delete()
+        return redirect("admin")
+
+
 
 def user_import(request):
     form = forms.ExcelImportForm(request.POST or None, request.FILES or None)

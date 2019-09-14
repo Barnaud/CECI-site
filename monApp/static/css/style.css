@@ -136,6 +136,17 @@ article .mini h1{
 	padding:8px;
 }
 
+.admin_del{
+	height: 30px;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	background-color: #8b0b00;
+	border: solid white;
+	border-radius: 30px;
+	padding:8px;
+}
+
 form p input[type = "text"]{
 	border: none;
 	border-bottom: gray solid 1px;
@@ -170,4 +181,9 @@ form ul[class="errorlist"]{
 .success{
 	color:green;
 }
-
+.deco {
+	height: 50px;
+	position: absolute;
+	margin: 20px;
+	right: 0px;
+}
