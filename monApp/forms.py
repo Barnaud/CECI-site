@@ -96,6 +96,7 @@ class ArticleForm(forms.ModelForm):
             if self.files["audio"][-4:] != ".mp3":
                 self.add_error("audio", "The provided file is not an MP3 file")
                 return 0
+            
             try:
                 shutil.rmtree(path.join(settings.MEDIA_ROOT, "static/content_audio/%s" % (m.id) ))
             except Exception:
