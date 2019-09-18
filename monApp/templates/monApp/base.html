@@ -9,7 +9,7 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    <header>
+    <header style="background:linear-gradient(45deg, {{ user.groupe.all.0.couleur }} 0%,{{ user.groupe.all.0.couleur2 }} 10%)">
         {% if user.groupe.all.0.logo %}
 	<img src="{{ user.groupe.all.0.logo.img.url }}" class="main_logo"/>
             <a href="/deco"><img src="{% static 'img/deco.png' %}" class="deco"/></a>

@@ -6,6 +6,7 @@ from monApp import util
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 import json
+from colour import Color
 
 # Create your models here.
 class ArticleType(models.Model):
@@ -32,6 +33,17 @@ class ForumGroup(models.Model):
     @staticmethod
     def objectList(arg):
         return ForumGroup.objects.all()
+
+    def couleur2(self):
+        try:
+            c2 = Color(self.couleur)
+        except ValueError:
+            return "#ffffff"
+        l = c2.get_luminance()
+        l = (l+1)/2
+        c2.set_luminance(l)
+        return c2.get_hex()
+
 
 
 class LangueSection(models.Model):
