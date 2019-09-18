@@ -70,10 +70,11 @@ class ArticleForm(forms.ModelForm):
         }
     subTitle = forms.CharField(required=False)
     fichier = forms.FileField(required=False)
+    audio = forms.FileField(required=False)
 
     def save(self, commit=True):
         m = super().save(commit=True)
-        if self.files:
+        if "fichier" in self.files:
             try:
                 image_set = convert_from_bytes(self.files["fichier"].file.read())
             except Exception as e:
@@ -91,8 +92,20 @@ class ArticleForm(forms.ModelForm):
             for img in image_set:
                 img_id += 1
                 img.save(path.join(settings.MEDIA_ROOT, "static/content/%s/image_%s.jpg" % (m.id, img_id)))
+        if "audio" in self.files:
+            if self.files["audio"][-4:] != ".mp3":
+                self.add_error("audio", "The provided file is not an MP3 file")
+                return 0
+            try:
+                shutil.rmtree(path.join(settings.MEDIA_ROOT, "static/content_audio/%s" % (m.id) ))
+            except Exception:
+                pass
+            finally:
+                mkdir(path.join(settings.MEDIA_ROOT, "static/content_audio/%s" % (m.id)))
+            with open(path.join(settings.MEDIA_ROOT, "static/content_audio/%s/%s" % (m.id, self.files["audio"].name)), 'wb+') as destination:
+                for chunk in self.files["audio"].chunks():
+                    destination.write(chunk)
 
-        print("pause")
 
 
 class MailFormTest(forms.Form):

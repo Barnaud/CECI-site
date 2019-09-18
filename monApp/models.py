@@ -137,6 +137,15 @@ class Article(models.Model):
         except Exception:
             return []
 
+    def get_audio_path(self):
+        path = "monApp/static/content_audio/%s"%(self.id)
+        try:
+            fileList = listdir(path)
+            fileList.sort()
+            return ["content_audio/%s/%s"%(self.id, name) for name in fileList]
+        except Exception:
+            return []
+
     @staticmethod
     def objectList(arg=None):
         if arg:

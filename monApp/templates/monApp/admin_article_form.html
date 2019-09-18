@@ -14,6 +14,12 @@
     </article>
     <article>
     {% if form.instance.id %}
+        {% if form.instance.get_audio_path %}
+<audio controls>
+  <source src="{% static form.instance.get_audio_path.0 %}" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+{% endif %}
     {% for image_path in form.instance.get_images_path %}
         <img src="{% static  image_path  %}" class="img_content"/>
     {% endfor %}

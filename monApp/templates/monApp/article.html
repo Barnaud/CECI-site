@@ -9,6 +9,13 @@
 {% block content %}
 
 <article>
+{% if article.get_audio_path %}
+<audio controls>
+  <source src={{article.get_audio_path.O}} type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+{% endif %}
+
 {% for image_path in article.get_images_path %}
         <img src="{% static  image_path  %}" class="img_content"/>
 {% endfor %}
