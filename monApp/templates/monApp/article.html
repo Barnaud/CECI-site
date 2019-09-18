@@ -11,7 +11,7 @@
 <article>
 {% if article.get_audio_path %}
 <audio controls>
-  <source src={{article.get_audio_path.O}} type="audio/mpeg">
+  <source src={% static article.get_audio_path.0 %} type="audio/mpeg">
 Your browser does not support the audio element.
 </audio>
 {% endif %}
