@@ -93,7 +93,7 @@ class ArticleForm(forms.ModelForm):
                 img_id += 1
                 img.save(path.join(settings.MEDIA_ROOT, "static/content/%s/image_%s.jpg" % (m.id, img_id)))
         if "audio" in self.files:
-            if self.files["audio"][-4:] != ".mp3":
+            if self.files["audio"].name[-4:] != ".mp3":
                 self.add_error("audio", "The provided file is not an MP3 file")
                 return 0
 
