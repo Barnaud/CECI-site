@@ -48,7 +48,7 @@ class UserForm(forms.ModelForm):
             template = get_template("monApp/mail_templates/addUser.txt")
             mail_content = template.render({"username": m.identifiant,
                                             "password": m.password})
-            msg=EmailMultiAlternatives("Bienvenue", mail_content, "test@mail.com", [m.mail])
+            msg=EmailMultiAlternatives("Bienvenue", mail_content, "noreply@docs-ceci-formation.fr", [m.mail])
             msg.send()
         m.save()
 

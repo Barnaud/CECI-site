@@ -194,12 +194,12 @@ class PlannedMail(models.Model):
             html_template = None
         args = json.loads(self.args)
         if "user_dest" in args or not self.to.mail:
-            if args["user_dest"] == "auto" or not self.to.mail:
-                for user in self.to.forumuser_set:
+            if args.get("user_dest") == "auto" or not self.to.mail:
+                for user in self.to.forumuser_set.all():
                     temp_arg = args
                     temp_arg["user"] = user
                     txt_content = txt_template.render(temp_arg)
-                    msg = EmailMultiAlternatives(self.mailModel.subject, txt_content, "test@mail.com", [user.mail])
+                    msg = EmailMultiAlternatives(self.subject, txt_content, "noreply@docs-ceci-formation.fr", [user.mail])
                     if self.mailModel.template_html:
                         html_content = html_template.render(temp_arg)
                         msg.attach_alternative(html_content, "text/html")
