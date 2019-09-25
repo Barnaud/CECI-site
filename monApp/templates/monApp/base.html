@@ -12,7 +12,15 @@
     <header style="background:linear-gradient(45deg, {{ user.groupe.all.0.couleur }} 0%,{{ user.groupe.all.0.couleur2 }} 10%)">
         {% if user.groupe.all.0.logo %}
 	<img src="{{ user.groupe.all.0.logo.img.url }}" class="main_logo"/>
+            <div class = "user_info">
+            <div class = "l1">
+                <p>{{ user.identifiant }}</p>
             <a href="/deco"><img src="{% static 'img/deco.png' %}" class="deco"/></a>
+                </div>
+                <div class = "l2">
+                    <p><a href = "/change_password">Changer de mot de passe</a></p>
+                </div>
+            </div>
         {% endif %}
 	</header>
 

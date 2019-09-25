@@ -159,3 +159,24 @@ def test(request):
     mail = models.PlannedMail.objects.get(id=1)
     mail.send()
     return HttpResponse("oui.")
+
+def change_password(request):
+    if not request.session.get("user"):
+        return HttpResponseForbidden()
+
+    form = forms.ChangePasswordForm(request.POST or None)
+    user = models.ForumUser.objects.get(id=request.session.get("user"))
+    print("yes")
+
+    if form.is_valid():
+        if util.hash(form.cleaned_data["old_password"]) == util.hash(user.password):
+            if form.cleaned_data["new_password"] == form.cleaned_data["new_password_confirm"]:
+                user.password = util.hash(form.cleaned_data["new_password"])
+                user.save()
+                return redirect("forum")
+            else:
+                form.add_error("new_password_confirm", "La confirmation de mot de passe ne correspond pas au premier mot de passe entré")
+        else:
+            form.add_error("old_password", "Mauvais mot de passe")
+
+    return render(request, "monApp/change_password.html", {"form": form, "user": user})

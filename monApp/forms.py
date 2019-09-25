@@ -147,3 +147,9 @@ class MailFormTest(forms.Form):
 
 class ExcelImportForm(forms.Form):
     file = forms.FileField()
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField()
+    new_password = forms.CharField()
+    new_password_confirm = forms.CharField()
+
