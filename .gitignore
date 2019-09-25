@@ -1,1 +1,3 @@
 db.sqlite3
+monApp/static/content/*
+monApp/static/content_audio/*

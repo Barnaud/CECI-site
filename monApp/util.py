@@ -6,7 +6,7 @@ import numpy as np
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from monApp import models
-
+from datetime import timedelta
 
 def isNan(value):
     if isinstance(value, float):
@@ -63,7 +63,8 @@ def gen_passwd(size):
 
 
 def endHour(dateTime):
-    return dateTime.replace(hour=dateTime.hour + 1, minute=0, second=0, microsecond=0)
+    dateTime = dateTime+timedelta(hours=1)
+    return dateTime.replace(minute=0, second=0, microsecond=0)
 
 
 def report(str):
