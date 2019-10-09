@@ -174,7 +174,7 @@ form ul {
 form ul[class="errorlist"]{
 	border:none;
 	color: red;
-	display: inline;
+	display: flex;
 	overflow:auto;
 }
 
@@ -186,4 +186,28 @@ form ul[class="errorlist"]{
 	position: absolute;
 	margin: 20px;
 	right: 0px;
+}
+.user_info {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: black solid;
+    border-radius: 13px;
+    margin: 1%;
+}
+
+.user_info .l1{
+	display:flex;
+	font-weight: bold;
+}
+
+.user_info .l2{
+	margin:20px;
+}
+
+.user_info p{
+	margin:20px;
+}
+.user_info a{
+	margin:5px;
 }

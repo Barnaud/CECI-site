@@ -6,6 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('', views.home),
+    path('change_password', views.change_password),
     path('deco', views.deco),
     path('accueil', views.forum, name='forum'),
     path('accueil/langue/<int:langue_id>', views.redirect_langue),
