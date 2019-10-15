@@ -101,7 +101,7 @@ class ForumUser(models.Model):
             template = get_template("monApp/mail_templates/addUser.txt")
             mail_content = template.render({"username": self.identifiant,
                                             "password": self.password})
-            msg = EmailMultiAlternatives("Bienvenue", mail_content, "test@mail.com", [self.mail])
+            msg = EmailMultiAlternatives("Bienvenue", mail_content, "noreply@docs-ceci-formation.fr", [self.mail])
             msg.send()
             file.write(self.mail)
         else:
