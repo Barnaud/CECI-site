@@ -66,7 +66,7 @@ class LangueSection(models.Model):
 
 
 class ForumUser(models.Model):
-    identifiant = models.CharField(max_length=30, unique=True, null=False)
+    identifiant = models.CharField(max_length=50, unique=True, null=False)
     password = models.CharField(max_length=300, null=False)
     mail = models.EmailField(null = True)
     groupe = models.ManyToManyField(ForumGroup)
