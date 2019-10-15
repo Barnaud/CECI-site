@@ -7,6 +7,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from monApp import models
 from datetime import timedelta
+import hashlib
 
 def isNan(value):
     if isinstance(value, float):
@@ -51,7 +52,9 @@ def check_excel_dict(dict):
 
 
 def hash(str):
-    return(str)
+    m = hashlib.sha256()
+    m.update(str.encode())
+    return(m.digest())
 
 
 def gen_passwd(size):
