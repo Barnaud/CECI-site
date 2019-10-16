@@ -103,6 +103,8 @@ class ForumUser(models.Model):
                                             "password": self.password})
             msg = EmailMultiAlternatives("Bienvenue", mail_content, "noreply@docs-ceci-formation.fr", [self.mail])
             msg.send()
+            self.password = util.hash(self.password)
+            self.save()
             file.write(self.mail)
         else:
             raise Exception("User has no E-mail")

@@ -1,5 +1,5 @@
 Bonjour et bienvenue
-Votre compte pour la plate-forme docs-ceci-formation a été créé.
+Votre compte pour la plate-forme docs-ceci-formation.fr a été créé.
 Veuillez trouver ci-dessous vos identifiants:
 
 identifiant:{{username}}

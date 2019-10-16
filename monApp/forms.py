@@ -50,6 +50,7 @@ class UserForm(forms.ModelForm):
                                             "password": m.password})
             msg=EmailMultiAlternatives("Bienvenue", mail_content, "noreply@docs-ceci-formation.fr", [m.mail])
             msg.send()
+            m.password = util.hash(m.password)
         m.save()
 
 
