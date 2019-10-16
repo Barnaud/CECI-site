@@ -18,6 +18,9 @@ Fichiers disponibles
             </div>
         </a>
     {% endfor %}
+
+{% if not langue.getArticles %}
+<p style="text-align: center;color: gray;">Aucun article disponible dans cette section pour le moment...</p>{% endif %}
 </article>
 
 {% endblock %}
