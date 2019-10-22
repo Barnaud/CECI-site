@@ -12,6 +12,7 @@
     <header style="background:linear-gradient(45deg, {{ user.groupe.all.0.couleur }} 0%,{{ user.groupe.all.0.couleur2 }} 10%)">
         {% if user.groupe.all.0.logo %}
 	<img src="{{ user.groupe.all.0.logo.img.url }}" class="main_logo"/>
+            <p class = "credits">Créé par Bernard Jenaste - Pole linguistique</p>
             <div class = "user_info">
             <div class = "l1">
                 <p>{{ user.identifiant }}</p>
@@ -25,14 +26,18 @@
 	</header>
 
     <nav>
+
+    </nav>
+    <div class="page">
+    <aside>
         {% for langue in user.getLangues %}
             <a href="/accueil/langue/{{langue.id}}"><div class="menu">{{ langue.nom_apparent }}</div></a>
         {% endfor %}
-    </nav>
+    </aside>
 
 {% block content %}
 {% endblock %}
-
+    </div>
 </body>
 </html>
 
