@@ -15,17 +15,18 @@
 
 
 	</header>
-
-    <nav>
+    <nav></nav>
+<div class="page">
+    <aside>
 
         <a href="{% url "admin" "group" "list" %}"><div class="menu">Gestion des utilisateurs</div></a>
         <a href="{% url "admin" "section" "list" %}"><div class="menu">Gestion des articles</div></a>
         <a href="{% url "admin" "mail" "list" %}"><div class="menu">Envois de mails</div></a>
         <a href="{% url 'user_import' %}"><div class="menu">Importer des étudiants</div></a>
-    </nav>
-
+    </aside>
 {% block content %}
 {% endblock %}
+</div>
 
 </body>
     <script src={% static "js/del.js" %}></script>
