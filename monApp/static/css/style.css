@@ -51,7 +51,27 @@ nav{
 	white-space: nowrap;
 	max-height: 50px;
 	overflow: auto;
-	height: 40px;
+}
+nav .menu{
+	display: inline-block;
+	margin: 0px;
+	margin-left: Opx;
+	font-weight: bold;
+	font-family: sans-serif;
+	color: white;
+	padding: 15px;
+	left: 30px;
+	position: relative;
+	transition: background-color;
+	transition-duration: 0.25s;
+}
+
+nav .menu:hover
+{
+	background-color: #002D66;
+	transition: background-color;
+	transition-duration: 0.25s;
+
 }
 
 aside{
