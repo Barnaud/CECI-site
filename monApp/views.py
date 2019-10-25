@@ -174,7 +174,7 @@ def change_password(request):
     print("yes")
 
     if form.is_valid():
-        if util.hash(form.cleaned_data["old_password"]) == user.password:
+        if str(util.hash(form.cleaned_data["old_password"])) == user.password:
             if form.cleaned_data["new_password"] == form.cleaned_data["new_password_confirm"]:
                 user.password = util.hash(form.cleaned_data["new_password"])
                 user.save()
