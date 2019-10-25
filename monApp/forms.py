@@ -151,7 +151,7 @@ class ExcelImportForm(forms.Form):
 
 
 class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField()
-    new_password = forms.CharField()
-    new_password_confirm = forms.CharField()
+    old_password = forms.CharField(widget=forms.PasswordInput())
+    new_password = forms.CharField(widget=forms.PasswordInput())
+    new_password_confirm = forms.CharField(widget=forms.PasswordInput())
 
