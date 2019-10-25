@@ -134,6 +134,11 @@ def admin(request, model = "group", action="list", arg=None):
 
 
 def user_import(request):
+    if not request.session.get("user"):
+        return HttpResponseForbidden()
+    if not models.ForumUser.objects.get(id=request.session.get("user")).admin:
+        return HttpResponseForbidden()
+
     form = forms.ExcelImportForm(request.POST or None, request.FILES or None)
     if request.FILES and form.is_valid():
         excel_dict = util.excel_read(form.files["file"].open())
@@ -180,3 +185,21 @@ def change_password(request):
             form.add_error("old_password", "Mauvais mot de passe")
 
     return render(request, "monApp/change_password.html", {"form": form, "user": user})
+
+def newPassword(request, arg):
+    if not request.session.get("user"):
+        return HttpResponseForbidden()
+    if not models.ForumUser.objects.get(id=request.session.get("user")).admin:
+        return HttpResponseForbidden()
+
+    try:
+        user = models.ForumUser.objects.get(id=arg)
+    except Exception:
+        return HttpResponseForbidden
+
+    try:
+        user.send_newpassword()
+    except Exception:
+        return HttpResponseForbidden
+
+    return redirect("admin")

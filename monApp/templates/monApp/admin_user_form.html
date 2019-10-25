@@ -8,10 +8,11 @@
     <form method="POST"/>
     {% csrf_token %}
     {{form.as_p}}
-
+    {% if form.instance.mail %}
+        <a href="{% url 'newPassword' arg=form.instance.id %}">Réinitialiser le mot de passe</a><br>
+    {% endif %}
     <input type = "submit">
     </form>
-
     </article>
     {% if form.instance.id %}
         <a href="{% url "admin" model="user" action="delete" arg=form.instance.id %}"><img src="{% static "img/del.png" %}" class = "admin_del"></a>

@@ -109,6 +109,19 @@ class ForumUser(models.Model):
         else:
             raise Exception("User has no E-mail")
 
+    def send_newpassword(self):
+        if self.mail:
+            self.password = util.gen_passwd(10)
+            template = get_template("monApp/mail_templates/newPassword.txt")
+            mail_content = template.render({"username": self.identifiant,
+                                            "password":self.password})
+            self.password = util.hash(self.password)
+            msg = EmailMultiAlternatives('Demande de nouveau mot de passe', mail_content, "noreply@docs-ceci-formation.fr", [self.mail])
+            msg.send()
+            self.save()
+        else:
+            raise Exception("User has no e-mail")
+
 class logo(models.Model):
     nom = models.CharField(max_length=50)
     img = models.ImageField(upload_to="static/img/logo")
