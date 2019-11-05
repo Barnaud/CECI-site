@@ -72,3 +72,53 @@ def endHour(dateTime):
 
 def report(str):
     print(str)
+
+
+def widafExtract(file):
+    df = pd.read_excel(file)
+    list = []
+    for k in range(len(df["Vocabulaire"])):
+        if not math.isnan(df["Vocabulaire"][k]):
+            dict = {}
+            NameLst = [df["Prénom"][k], df["Nom"][k]]
+            name = "%s %s" % (NameLst[0].lower(), NameLst[1].lower())
+            mail = "%s.%s@ecam-strasbourg.eu" % (NameLst[0], NameLst[1])
+            dict["mail"] = mail
+            dict["content"] = 'Bonjour, %s, Nous avons reçu les résultats du Widaf.\n' % (NameLst[0])
+            if int(df['Total'][k]) > 125:
+                dict[
+                    "content"] += "Félicitations, vous avez obtenu un score de %s points. Votre Widaf est donc validé.\n" % (
+                df["Total"][k])
+            else:
+                dict[
+                    "content"] += "Malheureusement, vous avez obtenu le score de %s points, qui n'est pas suffisant pour valider votre Widaf.\n" % (
+                df["Total"][k])
+            dict[
+                "content"] += "Vous avez obtenu %s points à la partie vocabulaire, %s points à la partie compréhension écrite, %s points à la partie compréhension orale.\nCordialement,\nBernard Jenaste" % (
+            int(df['Vocabulaire'][k]), int(df["Compréhensionécrite"][k]), int(df['Compréhensionorale'][k]))
+            list.append(dict)
+    return list
+
+def toeicExtract(file):
+    df = pd.read_excel(file, skiprows=12, usecols=4)
+    list = []
+    for k in range(len(df["R"])):
+        dict = {}
+        NameLst = df["Candidate name"][k].split(" ")
+        name = "%s %s" % (NameLst[-1], NameLst[-2])
+        mail = "%s.%s@ecam-strasbourg.eu" % (NameLst[-1], NameLst[-2])
+        dict["mail"] = mail
+        dict["content"] = 'Bonjour, %s, Nous avons reçu les résultats du Toeic.\n' % (NameLst[-1])
+        if int(df['TOTAL'][k]) > 800:
+            dict[
+                "content"] += "Félicitations, vous avez obtenu un score de %s points. Votre Toeic est donc validé.\n" % (
+            df["TOTAL"][k])
+        else:
+            dict[
+                "content"] += "Malheureusement, vous avez obtenu le score de %s points, qui n'est pas suffisant pour valider votre Toeic.\n" % (
+            df["TOTAL"][k])
+        dict[
+            "content"] += "Vous avez obtenu %s points à la partie Listening et %s points à la partie Reading.\nCordialement,\nBernard Jenaste" % (
+        df['L'][k], df["R"][k])
+        list.append(dict)
+    return list

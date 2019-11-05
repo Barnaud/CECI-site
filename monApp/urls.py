@@ -18,6 +18,7 @@ urlpatterns = [
     path('admin/test', views.test),
     path('admin/excel_import', views.user_import, name="user_import"),
     path('admin/user/<int:arg>/newPassword', views.newPassword, name="newPassword"),
+    path('admin/exam_extract', views.examExtract, name="examExtract")
 
 ]
 

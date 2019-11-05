@@ -155,3 +155,7 @@ class ChangePasswordForm(forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput())
     new_password_confirm = forms.CharField(widget=forms.PasswordInput())
 
+
+class ExamResults(forms.Form):
+    exam_type = forms.ChoiceField(choices=(("toeic", "Toeic"), ("widaf","Widaf")))
+    file = forms.FileField()

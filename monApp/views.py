@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from monApp import forms, models, util
 from django.forms import modelform_factory
+from django.core.mail import EmailMultiAlternatives
 from os import listdir
 
 
@@ -203,3 +204,26 @@ def newPassword(request, arg):
         return HttpResponseForbidden
 
     return redirect("admin")
+
+
+def examExtract(request):
+    form = forms.ExamResults(request.POST or None, request.FILES)
+    if form.is_valid() and request.FILES:
+        if(form.cleaned_data["exam_type"] == "toeic"):
+            try:
+                mails = util.toeicExtract(form.files["file"])
+            except Exception:
+                form.add_error("file", "Erreur avec le fichier, veuillez vérifier")
+                return render(request, "monApp/admin_send_results.html", {"form": form})
+        elif(form.cleaned_data["exam_type"] == "widaf"):
+            try:
+                mails = util.widafExtract(form.files["file"])
+            except Exception:
+                form.add_error("file", "Erreur avec le fichier, veuillez vérifier")
+                return render(request, "monApp/admin_send_results.html", {"form": form})
+        else:
+            raise HttpResponseForbidden
+        for mail in mails:
+            msg = EmailMultiAlternatives("Resultats %s"%(form.cleaned_data["exam_type"]), mail["content"], "noreply@docs-ceci-formation.fr", [mail["mail"]])
+            msg.send()
+    return render(request, "monApp/admin_send_results.html", {"form":form})
