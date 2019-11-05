@@ -207,7 +207,7 @@ def newPassword(request, arg):
 
 
 def examExtract(request):
-    form = forms.ExamResults(request.POST or None, request.FILES)
+    form = forms.ExamResults(request.POST or None, request.FILES or None)
     if form.is_valid() and request.FILES:
         if(form.cleaned_data["exam_type"] == "toeic"):
             try:
