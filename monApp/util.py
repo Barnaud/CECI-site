@@ -23,14 +23,15 @@ def excel_read(file):
 
     for k in range(len(df["Nom"])):
         dict = {}
-        if isNan(df["Nom"][k]) or isNan(df["Prénom"][k]):
-            dict["identifiant"] = df["Identifiant"][k]
-        else:
+        if isNan(df["Identifiant"][k]):
             dict["identifiant"] = "%s.%s" % (df["Prénom"][k], df["Nom"][k])
-            additional_id=2
+            additional_id = 2
             while models.ForumUser.objects.filter(identifiant=dict["identifiant"]).count():
                 dict["identifiant"] = "%s.%s%s" % (df["Prénom"][k], df["Nom"][k], additional_id)
-                additional_id +=1
+                additional_id += 1
+        else:
+            dict["identifiant"] = df["Identifiant"][k]
+
 
         dict["mail"] = df["Addresse e-mail"][k]
         dict["groupe"] = df["Groupe"][k]
@@ -45,6 +46,7 @@ def check_excel_dict(dict):
                 raise Exception("Wrong data type")
         if len(user["identifiant"])<3:
             raise Exception("Username %s too short" % (user["identifiant"]))
+        print(user)
         validate_email(user["mail"])
         models.ForumGroup.objects.get(nom=user['groupe'])
         if models.ForumUser.objects.filter(identifiant=user["identifiant"]).count():

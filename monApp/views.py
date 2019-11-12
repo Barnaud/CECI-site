@@ -13,11 +13,11 @@ def home(request):
     auth_form = forms.LoginForm(request.POST or None)
     if auth_form.is_valid():
         req = models.ForumUser.objects.filter(
-            identifiant=auth_form.cleaned_data["id"],
+            identifiant__iexact=auth_form.cleaned_data["id"],
             password=util.hash(auth_form.cleaned_data["mdp"])).count()
         if req == 1:
-            request.session["user"] = models.ForumUser.objects.get(identifiant=auth_form.cleaned_data["id"]).id
-            if models.ForumUser.objects.get(identifiant=auth_form.cleaned_data["id"]).admin:
+            request.session["user"] = models.ForumUser.objects.get(identifiant__iexact=auth_form.cleaned_data["id"]).id
+            if models.ForumUser.objects.get(identifiant__iexact=auth_form.cleaned_data["id"]).admin:
                 return  redirect("admin")
             return redirect("forum")
         else:
