@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from os import listdir
-from datetime import datetime
+from datetime import datetime, timedelta
 from monApp import util
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
@@ -130,7 +130,7 @@ class logo(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=30, null=False)
     subTitle = models.CharField(max_length=100, null=True)
-    date = models.DateField(default=timezone.now())
+    date = models.DateField(default=timezone.now)
     type_id = models.ForeignKey("ArticleType", on_delete=models.PROTECT, default=1)
     langue = models.ManyToManyField(LangueSection)
 
@@ -171,22 +171,12 @@ class Article(models.Model):
             return Article.objects.all()
 
 
-class MailModel(models.Model):
-    name = models.CharField(null=False, max_length=50)
-    template_txt = models.FilePathField(null=False)
-    template_html = models.FilePathField(null=True)
-
-    def __str__(self):
-        return self.name
-
-
 class PlannedMail(models.Model):
     to = models.ForeignKey("ForumGroup", on_delete=models.CASCADE)
     subject = models.CharField(null=True, max_length=50)
-    mailModel = models.ForeignKey("MailModel", on_delete=models.PROTECT)
-    args = models.TextField(null=True)
+    content = models.TextField(null=True)
     sent = models.BooleanField(default=False)
-    time = models.DateTimeField(default=util.endHour(datetime.now()))
+    time = models.DateField(default=datetime.now().date() + timedelta(weeks=2))
 
     list_template = "monApp/admin_mail_list.html"
     form_template = "monApp/admin_mail_form_test.html"
@@ -196,7 +186,7 @@ class PlannedMail(models.Model):
         return PlannedMail.objects.all().order_by("time")
 
     def __str__(self):
-        return "%s - %s - %s/%s/%s" % (self.mailModel,
+        return "%s - %s - %s/%s/%s" % (self.subject,
                                              self.to,
                                              self.time.day,
                                              self.time.month,
@@ -204,27 +194,10 @@ class PlannedMail(models.Model):
                                              )
 
     def send(self):
-        txt_template = get_template(self.mailModel.template_txt)
-        if self.mailModel.template_html:
-            html_template = get_template(self.mailModel.template_html)
-        else:
-            html_template = None
-        args = json.loads(self.args)
-        if "user_dest" in args or not self.to.mail:
-            if args.get("user_dest") == "auto" or not self.to.mail:
-                for user in self.to.forumuser_set.all():
-                    temp_arg = args
-                    temp_arg["user"] = user
-                    txt_content = txt_template.render(temp_arg)
-                    msg = EmailMultiAlternatives(self.subject, txt_content, "noreply@docs-ceci-formation.fr", [user.mail])
-                    if self.mailModel.template_html:
-                        html_content = html_template.render(temp_arg)
-                        msg.attach_alternative(html_content, "text/html")
-                    ret = msg.send()
-        else:
-            txt_content = txt_template.render(args)
-            msg = EmailMultiAlternatives(self.mailModel.subject, txt_content, "test@mail.com", [self.to.mail])
-            ret = msg.send()
+        for user in self.to.forumuser_set.all():
+                txt_content = self.content
+                msg = EmailMultiAlternatives(self.subject, txt_content, "noreply@docs-ceci-formation.fr", [user.mail])
+                ret = msg.send()
         if ret:
             self.delete()
         else:

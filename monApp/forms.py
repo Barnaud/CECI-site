@@ -110,41 +110,17 @@ class ArticleForm(forms.ModelForm):
 
 
 
-class MailFormTest(forms.Form):
+class MailFormTest(forms.ModelForm):
 
-    to = forms.ModelChoiceField(queryset=models.ForumGroup.objects.all(), required=True)
-    date = forms.DateField(initial=datetime.now().date() + timedelta(weeks=2), required=True)
-    langue = forms.CharField(required=True)
-    instance = forms.IntegerField(widget=forms.HiddenInput, required=False)
-
-    def save(self):
-        subject = "Préparation du DS du %s - %s" % (self.cleaned_data["date"], self.cleaned_data["langue"])
-        args = json.dumps({"langue":self.cleaned_data["langue"], "date": datetime.strftime(self.cleaned_data["date"], "%d/%m/%Y")})
-        model = models.MailModel.objects.get(id=1)
-        if self.cleaned_data["instance"]:
-            mail = models.PlannedMail.objects.get(id=self.cleaned_data["instance"])
-            mail.to = self.cleaned_data["to"]
-            mail.subject = subject
-            mail.args = args
-            mail.time = self.cleaned_data["date"]-timedelta(weeks=2)
-
-        else:
-            mail = models.PlannedMail.objects.create(to=self.cleaned_data["to"], subject=subject, mailModel=model, args=args,
-                                                 time=self.cleaned_data["date"]-timedelta(weeks=2))
-
-        mail.save()
-
-    def __init__(self,data=None, files=None, instance=None):
-        if instance:
-            ret = super().__init__(data=data, files=files, initial={
-                "to": instance.to,
-                "date": str(datetime.strptime(json.loads(instance.args)["date"], "%d/%m/%Y").date()),
-                "langue": json.loads(instance.args)["langue"],
-                "instance": instance.id,
-            })
-        else:
-            ret=super().__init__(data=data, files=files)
-        return ret
+    class Meta:
+        model=models.PlannedMail
+        fields=("to", "time", "subject", "content")
+        widgets={
+            "content": forms.Textarea,
+        }
+        labels={
+            "time": "Send date"
+        }
 
 class ExcelImportForm(forms.Form):
     file = forms.FileField()
