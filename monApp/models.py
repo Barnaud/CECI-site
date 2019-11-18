@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from os import listdir
-from datetime import datetime, timedelta
+from datetime import datetime
 from monApp import util
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
@@ -176,7 +176,7 @@ class PlannedMail(models.Model):
     subject = models.CharField(null=True, max_length=50)
     content = models.TextField(null=True)
     sent = models.BooleanField(default=False)
-    time = models.DateField(default=datetime.now().date() + timedelta(weeks=2))
+    time = models.DateField(default=datetime.now().date())
 
     list_template = "monApp/admin_mail_list.html"
     form_template = "monApp/admin_mail_form_test.html"
