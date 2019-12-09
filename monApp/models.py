@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from monApp import util
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
+from django.utils import timezone
 import json
 from colour import Color
 from docx import Document
@@ -207,7 +208,7 @@ class PlannedMail(models.Model):
 
 class ExamInvite(models.Model):
     to = models.ForeignKey("ForumGroup", on_delete=models.CASCADE)
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=timezone.now)
     examType = models.CharField(default="Toeic", max_length=20)
 
     list_template = "monApp/admin_exam_list.html"
