@@ -9,6 +9,7 @@
     {% csrf_token %}
     <fieldset {% if form.instance.id %}disabled="disabled"{% endif %} style="border: none">
     {{form.as_p}}
+    <p>Nombre d'étudiants présents pour le moment: {{ form.instance.get_nb_accept }}</p>
     </fieldset>
     <input type = "submit">
     </form>

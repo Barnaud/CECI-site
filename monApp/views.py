@@ -135,7 +135,6 @@ def admin(request, model = "group", action="list", arg=None):
         return redirect("admin")
 
 
-
 def user_import(request):
     if not request.session.get("user"):
         return HttpResponseForbidden()

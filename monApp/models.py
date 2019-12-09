@@ -214,6 +214,9 @@ class ExamInvite(models.Model):
     list_template = "monApp/admin_exam_list.html"
     form_template = "monApp/admin_exam_form.html"
 
+    def get_nb_accept(self):
+        return ExamInviteItem.objects.filter(parent=self.id, accepted=True).count()
+
     @staticmethod
     def objectList(arg=None):
         return ExamInvite.objects.filter(date__gte=datetime.now()).order_by("date")
