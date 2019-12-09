@@ -90,6 +90,7 @@ def admin(request, model = "group", action="list", arg=None):
         "section": models.LangueSection,
         "article": models.Article,
         "mail": models.PlannedMail,
+        "exam_invite": models.ExamInvite,
     }
     formDict = {
         "group": forms.GroupForm,
@@ -97,6 +98,7 @@ def admin(request, model = "group", action="list", arg=None):
         "section": forms.SectionForm,
         "article": forms.ArticleForm,
         "mail": forms.MailFormTest,
+        "exam_invite": forms.ExamInvite,
     }
 
     success = None
@@ -208,6 +210,7 @@ def newPassword(request, arg):
 
 def examExtract(request):
     form = forms.ExamResults(request.POST or None, request.FILES or None)
+    success = False
     if form.is_valid() and request.FILES:
         if(form.cleaned_data["exam_type"] == "toeic"):
             try:
@@ -226,4 +229,28 @@ def examExtract(request):
         for mail in mails:
             msg = EmailMultiAlternatives("Resultats %s"%(form.cleaned_data["exam_type"]), mail["content"], "noreply@docs-ceci-formation.fr", [mail["mail"]])
             msg.send()
-    return render(request, "monApp/admin_send_results.html", {"form":form})
+            success = True
+
+    return render(request, "monApp/admin_send_results.html", {"form":form, "success": success})
+
+def test_exam_confirm(request, arg):
+    try:
+        item = models.ExamInviteItem.objects.get(link=arg)
+    except models.ExamInviteItem.DoesNotExist:
+        raise Http404
+    if item.accepted:
+        return HttpResponse("Invite already accepted")
+
+    return render(request, "monApp/exam_confirm.html", {"item": item})
+
+def exam_confirm_confirm(request, arg):
+    try:
+        item = models.ExamInviteItem.objects.get(link=arg)
+    except models.ExamInviteItem.DoesNotExist:
+        raise Http404
+    if item.accepted:
+        return HttpResponse("Invite already accepted")
+    item.send_confirm(item.generate_convoc())
+    item.accepted = True
+    item.save()
+    return (HttpResponse("Merci pour votre confirmation, vous reçevrez votre convocation par mail."))

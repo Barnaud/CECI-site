@@ -22,6 +22,7 @@
         <a href="{% url "admin" "mail" "list" %}"><div class="menu">Envois de mails</div></a>
         <a href="{% url 'user_import' %}"><div class="menu">Importer des étudiants</div></a>
         <a href ="{% url "examExtract" %}"><div class="menu">Envoyer des resultats de test</div></a>
+        <a href="{% url "admin" "exam_invite" "list" %}"><div class="menu">Envoyer des convocations</div></a>
     </nav>
 {% block content %}
 {% endblock %}

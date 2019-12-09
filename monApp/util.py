@@ -114,13 +114,14 @@ def toeicExtract(file):
         if int(df['TOTAL'][k]) > 800:
             dict[
                 "content"] += "Félicitations, vous avez obtenu un score de %s points. Votre Toeic est donc validé.\n" % (
-            df["TOTAL"][k])
+            int(df["TOTAL"][k]))
         else:
             dict[
                 "content"] += "Malheureusement, vous avez obtenu le score de %s points, qui n'est pas suffisant pour valider votre Toeic.\n" % (
-            df["TOTAL"][k])
+            int(df["TOTAL"][k]))
         dict[
             "content"] += "Vous avez obtenu %s points à la partie Listening et %s points à la partie Reading.\nCordialement,\nBernard Jenaste" % (
-        df['L'][k], df["R"][k])
+        int(df['L'][k]), int(df["R"][k]))
         list.append(dict)
     return list
+

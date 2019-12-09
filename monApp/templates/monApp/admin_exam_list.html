@@ -1,0 +1,16 @@
+{% extends "monApp/admin_base.html" %}
+{% load static %}
+{% block content %}
+    <article>
+    {% for exam in objectList %}
+        <a href="{% url "admin" model="exam_invite" action="edit" arg=exam.id %}">
+            <div class="article">
+                    <h1>{{ exam }}</h1>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</article>
+
+    <a href="{% url "admin" action="add" model="exam_invite" %}"><img src={% static "img/add.png" %} class="admin_add"></a>
+{% endblock %}

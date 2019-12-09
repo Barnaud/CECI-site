@@ -1,0 +1,7 @@
+Bonjour,
+
+Votre présence au {{parent.examType}} du {{parent.date}} est confirmée.
+
+Vous trouverez ci-joint votre convocation.
+
+Cordialement,

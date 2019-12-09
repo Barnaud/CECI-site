@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils import timezone
 from os import listdir
-from datetime import datetime
+from datetime import datetime, timedelta
 from monApp import util
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 import json
 from colour import Color
+from docx import Document
+
 
 # Create your models here.
 class ArticleType(models.Model):
@@ -202,3 +204,63 @@ class PlannedMail(models.Model):
             self.delete()
         else:
             util.report("Erreur d'envoi d'un mail")
+
+class ExamInvite(models.Model):
+    to = models.ForeignKey("ForumGroup", on_delete=models.CASCADE)
+    date = models.DateTimeField(default=datetime.now())
+    examType = models.CharField(default="Toeic", max_length=20)
+
+    list_template = "monApp/admin_exam_list.html"
+    form_template = "monApp/admin_exam_form.html"
+
+    @staticmethod
+    def objectList(arg=None):
+        return ExamInvite.objects.filter(date__gte=datetime.now()).order_by("date")
+
+    def __str__(self):
+        return "%s - %s - %s" % (self.examType, self.to, self.date)
+
+class ExamInviteItem(models.Model):
+    user = models.ForeignKey("ForumUser", on_delete=models.CASCADE)
+    parent = models.ForeignKey("ExamInvite", on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+    link = models.TextField()
+
+
+    @staticmethod
+    def objectList(arg=None):
+        return ExamInviteItem.objects.filter(parent=arg)
+
+    def __str__(self):
+        return self.user.identifiant
+
+    def send(self):
+        template = get_template("monApp/mail_templates/exam_invite.txt")
+        text = template.render({"parent": self.parent, "lien": self.link })
+        mail = EmailMultiAlternatives("%s du %s"%(self.parent.examType, str(self.parent.date.date())), text, "noreply@docs-ceci-formation.fr", [self.user.mail])
+        mail.send()
+
+    def generate_convoc(self):
+
+        doc = Document("monApp/static/toeic.docx")
+
+        doc.paragraphs[0].runs[2].text = self.parent.examType
+        doc.paragraphs[1].runs[0].text = self.user.identifiant.replace(".", " ").capitalize()
+        date = self.parent.date
+        doc.tables[0]._cells[0].paragraphs[1].runs[2].text = date.strftime("%d/%m/%Y")
+        doc.tables[0]._cells[0].paragraphs[2].runs[1].text = (date-timedelta(hours=1)).strftime("%Hh%M")
+        doc.tables[0]._cells[0].paragraphs[2].runs[6].text = date.strftime("%Hh%M")
+        doc.tables[0]._cells[0].paragraphs[2].runs[8].text = "(Durée %s)" % ("1h" if self.parent.examType == "Widaf" else "2h30")
+
+
+        doc.save("monApp/convocations/%s - %s - %s.docx"%(self.parent.examType, self.user, self.link))
+        return("monApp/convocations/%s - %s - %s.docx"%(self.parent.examType, self.user, self.link))
+
+    def send_confirm(self, convoc):
+        template = get_template("monApp/mail_templates/exam_confirm.txt")
+        text = template.render({"parent": self.parent })
+        mail = EmailMultiAlternatives("Confirmation - %s du %s"%(self.parent.examType, str(self.parent.date.date())), text, "noreply@docs-ceci-formation.fr", [self.user.mail])
+        mail.attach_file(convoc)
+        mail.send()
+
+

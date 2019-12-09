@@ -1,0 +1,32 @@
+{% extends "monApp/admin_base.html" %}
+{% load static %}
+{% block content %}
+    <article>
+    {% if success %}
+        <p class="success">Utilisateur enregistré avec succès!</p>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data"/>
+    {% csrf_token %}
+    <fieldset {% if form.instance.id %}disabled="disabled"{% endif %} style="border: none">
+    {{form.as_p}}
+    </fieldset>
+    <input type = "submit">
+    </form>
+    {% if form.instance.id %}
+        {% for item in form.instance.examinviteitem_set.all %}
+            <div class="mini article" style="display: flex; align-items: center">
+            {% if item.accepted %}
+            <img src="{% static 'img/ok.png' %}" style="height: 20px;margin: 5px">
+            {% else %}
+                <img src="{% static 'img/not_ok.png' %}" style="height: 20px;margin: 5px">
+            {% endif %}
+                    <p>{{ item }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    </article>
+    {% if form.instance.id %}
+    <a href="{% url "admin" model="group" action="delete" arg=form.instance.id %}"><img src="{% static "img/del.png" %}" class = "admin_del"></a>
+    {% endif %}
+{% endblock %}

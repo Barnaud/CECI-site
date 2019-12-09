@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
+    <style>
+        .accept
+        {
+            text-align: center;display: inline-block;
+            border: solid black;
+            margin-left: 35%;
+            width: 30%;
+            background-image: radial-gradient(circle at center,#2bff00 ,#409130);
+            color: black;
+        }
+        .accept:hover{
+            background-image: radial-gradient(circle at center, #2bff00, #193912);
+        }
+    </style>
+</head>
+<body>
+    <header style="background:linear-gradient(45deg, {{ user.groupe.all.0.couleur }} 0%,{{ user.groupe.all.0.couleur2 }} 10%)">
+        {% if user.groupe.all.0.logo %}
+	<img src="{{ user.groupe.all.0.logo.img.url }}" class="main_logo"/>
+            <p class = "credits">Créé par Bernard Jénaste - Pôle linguistique</p>
+            <div class = "user_info">
+            <div class = "l1">
+                <p>{{ user.identifiant }}</p>
+            <a href="/deco"><img src="{% static 'img/deco.png' %}" class="deco"/></a>
+                </div>
+                <div class = "l2">
+                    <p><a href = "/change_password">Changer de mot de passe</a></p>
+                </div>
+            </div>
+        {% endif %}
+	</header>
+    <article>
+        <h1 style="text-align: center">Confirmation d'inscription pour le {{ item.parent.examType }} du {{ item.parent.date }}</h1>
+        <h2 style="text-align: center; font-size: large">Cette confirmation vous engage à vous présenter à l'examen</h2>
+        <a href="{% url "examConfirmConfirm" arg=item.link %}"><div class="accept"><p>Confirmer</p></div></a>
+    </article>
+    </div>
+</body>
+</html>

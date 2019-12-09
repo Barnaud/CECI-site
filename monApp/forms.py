@@ -3,11 +3,12 @@ from monApp import models, util
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, date
 from pdf2image import convert_from_bytes
 from os import path, mkdir
 from Django import settings
 import shutil
+from hashlib import md5
 
 
 class LoginForm(forms.Form):
@@ -135,3 +136,25 @@ class ChangePasswordForm(forms.Form):
 class ExamResults(forms.Form):
     exam_type = forms.ChoiceField(choices=(("toeic", "Toeic"), ("widaf","Widaf")))
     file = forms.FileField()
+
+
+class ExamInvite(forms.ModelForm):
+
+    class Meta:
+        model = models.ExamInvite
+        fields=("to", "date", "examType")
+        widgets={
+            "examType": forms.Select(choices=(("Toeic", "Toeic"), ("Widaf", "Widaf"))),
+        }
+        labels={"examType":"Exam type"}
+
+    def save(self):
+        m = super().save(commit=True)
+        for user in m.to.forumuser_set.all():
+            hasher = md5()
+            string = "%s%s"%(str(m), user.identifiant)
+            hasher.update(string.encode("utf-8"))
+            hash = hasher.hexdigest()
+            item = models.ExamInviteItem.objects.create(user=user, parent=m, link=hash)
+            item.save()
+            item.send()

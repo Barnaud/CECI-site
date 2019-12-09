@@ -1,0 +1,7 @@
+Bonjour,
+Vous êtes invité au {{parent.examType}} du {{parent.date}}.
+
+Pour confirmer votre présence, veuillez cliquer sur ce lien:
+    docs-ceci-formation.fr/exam_confirm/{{lien}}
+
+Cordialement,
