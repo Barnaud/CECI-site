@@ -6,6 +6,7 @@ from monApp import forms, models, util
 from django.forms import modelform_factory
 from django.core.mail import EmailMultiAlternatives
 from os import listdir
+from datetime import datetime
 
 
 def home(request):
@@ -210,27 +211,40 @@ def newPassword(request, arg):
 def examExtract(request):
     form = forms.ExamResults(request.POST or None, request.FILES or None)
     success = False
+    RecapMail = ""
     if form.is_valid() and request.FILES:
-        if(form.cleaned_data["exam_type"] == "toeic"):
+        if(form.cleaned_data["exam_type"] in ('toeic', "toeic_s5", "toeic_s6")):
             try:
-                mails = util.toeicExtract(form.files["file"])
-            except Exception:
-                form.add_error("file", "Erreur avec le fichier, veuillez vérifier")
+                mails = util.toeicExtract(form.files["file"], form.cleaned_data["exam_type"])
+                save = open("save_excel/%s_success.xlsx" % datetime.now(), "wb+")
+                for chunk in form.files["file"].chunks():
+                    save.write(chunk)
+                save.close()
+            except Exception as e:
+                form.add_error("file", e)
+                save = open("save_excel/%s_failure.xlsx" % datetime.now(), "wb+")
+                for chunk in form.files["file"].chunks():
+                    save.write(chunk)
+                save.close()
                 return render(request, "monApp/admin_send_results.html", {"form": form})
-        elif(form.cleaned_data["exam_type"] == "widaf"):
+        elif(form.cleaned_data["exam_type"] in ("widaf", "widaf_s5", "widaf_s6")):
             try:
-                mails = util.widafExtract(form.files["file"])
-            except Exception:
-                form.add_error("file", "Erreur avec le fichier, veuillez vérifier")
+                mails = util.widafExtract(form.files["file"], form.cleaned_data["exam_type"])
+            except Exception as e:
+                print(e)
+                form.add_error("file", e)
                 return render(request, "monApp/admin_send_results.html", {"form": form})
         else:
             raise HttpResponseForbidden
         for mail in mails:
             msg = EmailMultiAlternatives("Resultats %s"%(form.cleaned_data["exam_type"]), mail["content"], "noreply@docs-ceci-formation.fr", [mail["mail"]])
             msg.send()
+            RecapMail += "Message envoyé à l'addresse %s: \n\n%s\n\n===============\n\n"%(mail["mail"], mail["content"])
             success = True
+        msg = EmailMultiAlternatives("Récapitulatif des e-mails envoyés", RecapMail, "noreply@docs-ceci-formation.fr", ["bernard.jenaste@ceci-formation.com"])
+        msg.send()
 
-    return render(request, "monApp/admin_send_results.html", {"form":form, "success": success})
+    return render(request, "monApp/admin_send_results.html", {"form": form, "success": success})
 
 def test_exam_confirm(request, arg):
     try:

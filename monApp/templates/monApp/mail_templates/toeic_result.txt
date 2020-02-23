@@ -1,0 +1,38 @@
+Bonjour,
+Nous avons reçu les résultats du Toeic {{blanc}}.
+Vous avez obtenu le score de {{score}}
+{% if blanc %}Votre niveau pour ce test serait: {{grade}}{% else %}Votre niveau pour ce test est: {{grade}}
+{% endif %}{% if success %}{% if s != 7 %}
+Votre Toeic serait donc validé.
+Néanmoins, je vous recommande de continuer à travailler puisque le toeic officiel recèle des pièges plus amples encore; vous êtes donc sur la bonne voie mais cela ne présage  pas automatiquement de l'avenir.
+je vous recommande de redoubler d'effort pour que ce score soit le score du test officiel.
+ - de suivre attentivement les cours de vos professeurs sans présupposer de vos compétences et niveaux -ils savent comment vous conduire à l'excellence!
+{% endif %}{% if s == 7 %}
+Votre Toeic est donc validé.
+{% endif %}
+{% else %}
+{% if s == 7 %}
+Votre Toeic n'est donc malheureusement pas validé.
+{% endif %}
+{% if s == 5 and score < 500 %}
+Votre score étant inférieur à 500, vous devez réaliser un stage opérateur, ou un séjour linguistique.
+Concernant le stage linguistique vous pouvez contacter :
+
+Maria Sillero
+Sales and Marketing Department
+
+maria@roseofyork.com
+www.roseofyork.com
+45 Oxford Street, London, W1D 2DZ
+T +44 (0)74 3804 5501
+
+ou M.Jenaste.
+
+{% endif %}
+{% if s == 6 and score < 600 %}
+Votre score étant inférieur à 600, vous devrez faire  au semestre 7 de l'ecam 4 une semestre de e-learning.
+{% endif %}
+{% endif %}
+Vous avez obtenu {{listening}} points au Listening et {{reading}} points au Reading.
+
+Cordialement,

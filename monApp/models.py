@@ -179,7 +179,7 @@ class PlannedMail(models.Model):
     subject = models.CharField(null=True, max_length=50)
     content = models.TextField(null=True)
     sent = models.BooleanField(default=False)
-    time = models.DateField(default=datetime.now().date())
+    time = models.DateField(default=timezone.now)
 
     list_template = "monApp/admin_mail_list.html"
     form_template = "monApp/admin_mail_form_test.html"

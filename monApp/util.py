@@ -5,9 +5,10 @@ import math
 import numpy as np
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from monApp import models
+from monApp import models, util
 from datetime import timedelta
 import hashlib
+from django.template.loader import get_template
 
 def isNan(value):
     if isinstance(value, float):
@@ -75,53 +76,106 @@ def endHour(dateTime):
 def report(str):
     print(str)
 
+def isNan(value):
+    if isinstance(value, float):
+        return math.isnan(value)
+    return False
 
-def widafExtract(file):
+
+def widafExtract(file, exam_type):
     df = pd.read_excel(file)
     list = []
+    errorList = []
     for k in range(len(df["Vocabulaire"])):
-        if not math.isnan(df["Vocabulaire"][k]):
+        if not isNan(df["Vocabulaire"][k]) and\
+                not isNan(df["Nom"][k]) and \
+                not isNan(df["Prénom"][k]) and \
+                not isNan(df["Compréhensionécrite"][k]) and \
+                not isNan(df["Compréhensionorale"][k]) and\
+                not isNan(df["Total"][k]) :
             dict = {}
-            NameLst = [df["Prénom"][k], df["Nom"][k]]
-            name = "%s %s" % (NameLst[0].lower(), NameLst[1].lower())
+            NameLst = [df["Prénom"][k].split(" ")[0], df["Nom"][k].split("-")[0].replace(" ", "")]
             mail = "%s.%s@ecam-strasbourg.eu" % (NameLst[0], NameLst[1])
             dict["mail"] = mail
-            dict["content"] = 'Bonjour, %s, Nous avons reçu les résultats du Widaf.\n' % (NameLst[0])
-            if int(df['Total'][k]) > 125:
-                dict[
-                    "content"] += "Félicitations, vous avez obtenu un score de %s points. Votre Widaf est donc validé.\n" % (
-                df["Total"][k])
-            else:
-                dict[
-                    "content"] += "Malheureusement, vous avez obtenu le score de %s points, qui n'est pas suffisant pour valider votre Widaf.\n" % (
-                df["Total"][k])
-            dict[
-                "content"] += "Vous avez obtenu %s points à la partie vocabulaire, %s points à la partie compréhension écrite, %s points à la partie compréhension orale.\nCordialement,\nBernard Jenaste" % (
-            int(df['Vocabulaire'][k]), int(df["Compréhensionécrite"][k]), int(df['Compréhensionorale'][k]))
+            template_params = {
+                "nom": df["Nom"][k],
+                "score": df["Total"][k],
+                "voc": df["Vocabulaire"][k],
+                "ce": df["Compréhensionécrite"][k],
+                "co": df["Compréhensionorale"][k],
+                "blanc": True if exam_type != "widaf" else False,
+                "exam_type": exam_type
+            }
+            template = get_template("monApp/mail_templates/widaf_result.txt")
+            dict["content"] = template.render(template_params)
             list.append(dict)
+        else:
+            errorList.append(k+2)
+        if errorList:
+            errorStr="Il manque des informations aux lignes suivantes: "
+            for elt in errorList:
+                errorStr += str(elt)+", "
+            errorStr = errorStr[:-2]
+            raise Exception(errorStr)
     return list
 
-def toeicExtract(file):
+def toeicExtract(file, examType):
     df = pd.read_excel(file, skiprows=12, usecols=4)
     list = []
+    errorLst = []
+    errorStr = "Il manque des éléments à la ligne suivante: "
     for k in range(len(df["R"])):
         dict = {}
-        NameLst = df["Candidate name"][k].split(" ")
-        name = "%s %s" % (NameLst[-1], NameLst[-2])
-        mail = "%s.%s@ecam-strasbourg.eu" % (NameLst[-1], NameLst[-2])
-        dict["mail"] = mail
-        dict["content"] = 'Bonjour, %s, Nous avons reçu les résultats du Toeic.\n' % (NameLst[-1])
-        if int(df['TOTAL'][k]) > 800:
-            dict[
-                "content"] += "Félicitations, vous avez obtenu un score de %s points. Votre Toeic est donc validé.\n" % (
-            int(df["TOTAL"][k]))
+        if not isNan(df["TOTAL"][k]) and \
+            not isNan(df["R"][k]) and \
+            not isNan(df["L"][k]) and \
+            not isNan(df["Candidate name"][k]):
+
+            NameLst = df["Candidate name"][k].split(",")[0].split(" ")
+            if len(NameLst) != 2:
+                raise Exception("Veuillez verifier le nom à la ligne: " + str(k))
+            template_param = {"nom": NameLst[-2],
+                              "score": int(df['TOTAL'][k]),
+                              "reading": int(df["R"][k]),
+                              "listening": int(df["L"][k]),
+                              "grade": util.getToeicGrade(int(df['TOTAL'][k])),
+                              "success": True if int(df['TOTAL'][k])>=800 else False}
+            mail = "%s.%s@ecam-strasbourg.eu" % (NameLst[-1], NameLst[-2])
+            dict["mail"] = mail
+            if examType == "toeic_s5":
+                template_param["s"] = 5
+                template_param["blanc"] = "blanc"
+            elif examType == "toeic_s6":
+                template_param["s"] = 6
+                template_param["blanc"] = "blanc"
+            else:
+                template_param["s"] = 7
+                template_param["blanc"] = ""
+
+            template = get_template("monApp/mail_templates/toeic_result.txt")
+            dict["content"] = template.render(template_param)
+            list.append(dict)
         else:
-            dict[
-                "content"] += "Malheureusement, vous avez obtenu le score de %s points, qui n'est pas suffisant pour valider votre Toeic.\n" % (
-            int(df["TOTAL"][k]))
-        dict[
-            "content"] += "Vous avez obtenu %s points à la partie Listening et %s points à la partie Reading.\nCordialement,\nBernard Jenaste" % (
-        int(df['L'][k]), int(df["R"][k]))
-        list.append(dict)
+            errorLst.append(k+14)
+
+        if  errorLst:
+            for elt in errorLst:
+                errorStr += str(elt)+", "
+            errorStr = errorStr[:-2]
+
+            raise Exception(errorStr)
     return list
 
+def getToeicGrade(mark):
+    if mark < 120:
+        return "Less than A1"
+    elif mark < 225:
+        return "A1"
+    elif mark < 550:
+        return "A2"
+    elif mark < 800:
+        return "B1"
+    elif mark < 945:
+        return "B2"
+    else:
+        return "C1"

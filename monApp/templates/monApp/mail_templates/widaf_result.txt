@@ -1,0 +1,15 @@
+Bonjour,
+Nous avons reçu les résultats du Widaf {% if blanc %}blanc{% endif %}
+Vous avez reçu le score de: {{score}}.
+{% if exam_type == "widaf" %}
+{% if score >= 125 %}Votre Widaf est donc validé.{% else %}Malheureusement, votre Widaf n'est donc pas validé.{% endif %}
+{% endif %}{% if exam_type == "widaf_s5" %}
+{% if score < 90 %} Votre score étant inférieur à 90, vous devrez effectuer un soutien auprès de Monsieur Jenaste ou un séjour linguistique.{% endif %}{% endif %}
+{% if exam_type == "widaf_s6" %}{% if score < 110 %}Votre score étant inférieur à 110, vous devrez participer à trois séances de soutien le samedi matin au semestre 7.{% else %}Votre Widaf serait donc validé.{% endif %}{% endif %}
+
+Vous avez obtenu:
+- {{voc}} points à l'épreuve de Vocabulaire
+- {{ce}} points à l'épreuve de compréhension écrite
+- {{co}} points à l'épreuve de compréhension orale
+
+Cordialement,

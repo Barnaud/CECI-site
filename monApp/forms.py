@@ -134,7 +134,12 @@ class ChangePasswordForm(forms.Form):
 
 
 class ExamResults(forms.Form):
-    exam_type = forms.ChoiceField(choices=(("toeic", "Toeic"), ("widaf","Widaf")))
+    exam_type = forms.ChoiceField(choices=(("toeic", "Toeic officiel"),
+                                           ("widaf","Widaf officiel"),
+                                           ('toeic_s5', "Toeic blanc S5"),
+                                           ("toeic_s6", "Toeic blanc S6"),
+                                           ("widaf_s5", "Widaf blanc S5"),
+                                           ("widaf_s6", "Widaf blanc S6")))
     file = forms.FileField()
 
 
