@@ -1,6 +1,6 @@
 # CECI-site
 
-##About  
+## About  
 This project is a Django-Website created for CECI-Formation in 2018, to improve communication between students ant teachers.
 Since the project went offline in 2022, I can now make it Opensource.
 
